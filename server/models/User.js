@@ -10,7 +10,6 @@ const UserSchame = new mongoose.Schema(
         password:{
             type: String,
             required: true,
-            unique: true
         },
         hoten:{
             type: String,
