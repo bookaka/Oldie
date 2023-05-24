@@ -19,7 +19,10 @@ const OrderSchema = new mongoose.Schema({
     DiaChiGiaoHang: String,
     ChiPhiVanChuyen: Number,
     Tongtien: Number,
-    TrangThai: String
+    TrangThai: {
+        type: String,
+        default: "Đang chờ xác nhận",
+    }
 },{timestamps: true}
 )
 const Order = mongoose.model('Order',OrderSchame);

@@ -4,6 +4,7 @@ import Product from "../models/Product.js";
 
 import Comment from "../models/Comment.js";
 import Cart from "../models/Cart.js";	
+import Order from "../models/Order.js";	
 
 /** Post product */
 export const  postProduct= async (req,res)=>{
@@ -124,6 +125,23 @@ export const updateUser= async (req,res)=>{
             }
         })
     }catch(e){
+        res.status(500).json({error: e.message});
+    }
+}
+
+/**Get Order */
+
+export const getOrder = async (req, res) => {
+    try{
+        let _idUser = req.params.id;
+        _idUser = _idUser.slice(1, _idUser.length);
+        const orders = await Order.find({_idUser})
+        res.status(200).json(orders);
+
+
+
+
+    } catch(e){
         res.status(500).json({error: e.message});
     }
 }

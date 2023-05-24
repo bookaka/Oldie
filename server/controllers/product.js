@@ -4,6 +4,7 @@ import Product from "../models/Product.js";
 
 import Comment from "../models/Comment.js";
 import Cart from "../models/Cart.js";	
+import Order from "../models/Order.js";
 
 /** find product */
 
@@ -58,4 +59,30 @@ export const addCart = async (req, res) => {
       res.status(500).json({ error: e.message });
     }
   };
+
+export const postOrder = async (req, res) => {
+  try{
+    let _idUser = req.params.id;
+    _idUser = _idUser.slice(1, _idUser.length);
+    let _idSeller = req.params.idS;
+    _idSeller = _idSeller.slice(1, _idSeller.length);
+    let _idP = req.params.idP;
+    _idP = _idP.slice(1, _idP.length);
+    const newOrder = new Order({
+      _idUser: _idUser,
+      _idNguoiBan: _idSeller,
+      _idSP: _idP,
+      SoLuong: req.body.SoLuong,
+      DiacChiGiaoHang: req.body.DiacChiGiaoHang,
+      ChiPhiVanChuyen: req.body.ChiPhiVanChuyen,
+      TongTien: req.body.TongTien,
+
+    })
+    const saveOrder = newOrder.save()
+    res.status(201).json(saveOrder);
+
+  }catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+}
   
