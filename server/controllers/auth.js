@@ -12,12 +12,8 @@ export const register = async(req,res) =>{
             username,
             password,
             hoten,
-            hinhanh,
             SDT,
-            diachi,
-            gioitinh,
-            email,
-            role
+            email
         } = req.body;
 
         const salt = await bcrypt.genSalt();
@@ -27,10 +23,10 @@ export const register = async(req,res) =>{
             username,
             password:passwordHash,
             hoten,
-            hinhanh,
+            hinhanh: null,
             SDT,
-            diachi,
-            gioitinh,
+            diachi: null,
+            gioitinh: null,
             email,
             role
         });

@@ -3,6 +3,7 @@ import{
     searchProduct,
     infProduct,
     addCart,
+    postOrder,
 
 } from "../controllers/product.js"
 
@@ -20,7 +21,7 @@ router.get('/:idP',infProduct)
 
 router.patch('/:id/:idP/cart',verifyToken,addCart)
 
-/** POST Order */
-
+/** POST Order id: idUser, idS: idSeller, idP: id Product */
+router.post('/:id/:idS/:idP/order',verifyToken,postOrder)
 
 export default router;

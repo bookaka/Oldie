@@ -6,6 +6,7 @@ import {
     getCart,        
     removeProduct,
     updateUser,
+    getOrder
 } from "../controllers/user.js"
 
 import { verifyToken } from "../middleware/auth.js"
@@ -22,6 +23,7 @@ router.post("/:id/:idP/cmtP",verifyToken, cmtProduct);
 
 router.get("/:id/getP",verifyToken, getProduct);
 router.get("/:id/getCart",verifyToken,getCart);
+router.get("/id/getOrder",verifyToken,getOrder);
 
 /** Update  */
 
