@@ -10,7 +10,6 @@ import Order from "../models/Order.js";
 export const  postProduct= async (req,res)=>{
     try {
         let _idUser =  req.params.id;
-        _idUser = _idUser.slice(1,_idUser.length)
         const newProduct = new Product({
             _idUser,
             TenSp:req.body.TenSp,
@@ -34,7 +33,6 @@ export const  postProduct= async (req,res)=>{
 export const  getProduct= async (req,res)=>{
     try {
         let _idUser =  req.params.id;
-        _idUser = _idUser.slice(1,_idUser.length)
         const products = await Product.find({ _idUser });
 
         res.status(200).json(products)
@@ -49,9 +47,7 @@ export const cmtProduct= async (req,res)=>{
     try {
       
         let _idUser = req.params.id;
-        _idUser = _idUser.slice(1, _idUser.length);
         let _idP = req.params.idP;
-        _idP = _idP.slice(1, _idP.length);
         const newCmt = new Comment({
             _idUser: _idUser,
             _idSp: _idP,
@@ -71,11 +67,11 @@ export const getCart= async (req,res)=>{
     try {
       
         let _idUser =  req.params.id;
-        _idUser = _idUser.slice(1,_idUser.length)
         const cart = await Cart.findOne({ _idUser });
         const _idSps = cart._idSp
-        const Products = await _idSps.map(_idSp => Product.findOne({ _id: _idSp }));
-        res.status(200).json(Products)
+        const productPromises = _idSps.map(_idSp => Product.findOne({ _id: _idSp }));
+        const products = await Promise.all(productPromises);
+        res.status(200).json(products)
         
 
 
@@ -88,9 +84,7 @@ export const getCart= async (req,res)=>{
 export const removeProduct = async (req, res) => {
     try {
         let _idUser = req.params.id;
-        _idUser = _idUser.slice(1, _idUser.length);
         let _idP = req.params.idP;
-        _idP = _idP.slice(1, _idP.length);
 
         const product = await Product.findOneAndRemove({ _id: _idP });
         if (product) {
@@ -110,7 +104,6 @@ export const updateUser= async (req,res)=>{
     try {
       
         let _id =  req.params.id;
-        _id = _id.slice(1,_idUser.length)
         User.findOneAndUpdate({_id:_id},{hoten: req.body.hoten,
             hinhanh: req.body.hinhanh,
             SDT: req.body.SDT,
@@ -134,7 +127,6 @@ export const updateUser= async (req,res)=>{
 export const getOrder = async (req, res) => {
     try{
         let _idUser = req.params.id;
-        _idUser = _idUser.slice(1, _idUser.length);
         const orders = await Order.find({_idUser})
         res.status(200).json(orders);
 
