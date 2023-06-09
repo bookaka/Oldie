@@ -5,6 +5,7 @@ import Product from "../models/Product.js";
 import Comment from "../models/Comment.js";
 import Cart from "../models/Cart.js";	
 import Order from "../models/Order.js";
+import multer from 'multer';
 
 /** find product */
 
@@ -27,8 +28,10 @@ export const infProduct = async (req, res) => {
     try{
         let _idP =  req.params.idP;
         const infProduct = await Product.findOne({_id:_idP});
-        const cmts =await Comment.find({_idSp: _idP})
-        res.status(200).json({infProduct,cmts})
+        const cmts =await Comment.find({_idSp: _idP}) 
+        const imagePath = "public/assets/";
+        const imageUrls = infProduct.Hinhanh.map((imageName) => `${imagePath}${imageName}`);
+        res.status(200).json({infProduct,imageUrls,cmts})
 
     } catch(e){
         res.status(500).json({error: e.message});

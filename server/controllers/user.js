@@ -5,11 +5,14 @@ import Product from "../models/Product.js";
 import Comment from "../models/Comment.js";
 import Cart from "../models/Cart.js";	
 import Order from "../models/Order.js";	
+import Picture from "../models/Picture.js";
+import path from 'path'
 
 /** Post product */
 export const  postProduct= async (req,res)=>{
     try {
         let _idUser =  req.params.id;
+        const imageUrls = req.files.map(file => file.filename); 
         const newProduct = new Product({
             _idUser,
             TenSp:req.body.TenSp,
@@ -17,12 +20,16 @@ export const  postProduct= async (req,res)=>{
             HangSanXuat: req.body.HangSanXuat,
             SoLuong:req.body.SoLuong,
             MoTaChiTiet:req.body.MoTaChiTiet,
-            HinhAnh: req.body.HinhAnh,
             Gia: req.body.Gia,
             DiaChi: req.body.DiaChi,
         })
         const savedProduct = await newProduct.save()
-        res.status(201).json(savedProduct);
+        const newPicture = new Picture({
+            _ids: savedProduct._id,
+            path: imageUrls
+        })
+        const savePicture = await newPicture.save()
+        res.status(200).json({savedProduct,savePicture});
 
 
     }catch(e){
@@ -32,10 +39,18 @@ export const  postProduct= async (req,res)=>{
 /** Get products */
 export const  getProduct= async (req,res)=>{
     try {
-        let _idUser =  req.params.id;
+        const _idUser = req.params.id;
         const products = await Product.find({ _idUser });
-
-        res.status(200).json(products)
+        const productPromises = products.map(async (product) => {
+            const images = await Image.find({ _idProduct: product._id });
+            const productWithImages = {
+                ...product._doc,
+                images: images.map((image) => image.url),
+              };
+            return productWithImages;
+        })
+        const productsWithImages = await Promise.all(productPromises);
+        res.status(200).json(productsWithImages)
 
     }catch(e){
         res.status(500).json({error: e.message});
@@ -136,6 +151,22 @@ export const getOrder = async (req, res) => {
     } catch(e){
         res.status(500).json({error: e.message});
     }
+}
+
+// Get Picture
+export const getPicture = async (req, res) => {
+    // const imageName = req.params.imageName;
+    // const imagePath = path.join(process.cwd(), 'public/assets', imageName);
+    // res.sendFile(imageName);
+    try {
+        const imageName = req.params.pictureName;
+        const imagePath = path.join(process.cwd(), 'public/assets', imageName);
+        res.sendFile(imagePath);
+ 
+
+   } catch (e) {
+    res.status(404).json(e.message);
+   }
 }
 
 

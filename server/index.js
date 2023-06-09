@@ -46,13 +46,13 @@ const upload = multer({ storage });
 
 /** ROUTERS */
 
-app.post("/auth/register",upload.single("picture"),register);
+app.post("/auth/register",upload.array("pictures"),register);
 
-app.use("/auth",upload.single("picture"),authRouters);
+app.use("/auth",upload.array("pictures"),authRouters);
 
-app.use("/user",upload.single("picture"),userRouters);
+app.use("/user",upload.array("pictures"),userRouters);
 
-app.use("/product",upload.single("picture"),productRouters);
+app.use("/product",upload.array("pictures",8),productRouters);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
