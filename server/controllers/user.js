@@ -7,50 +7,49 @@ import Cart from "../models/Cart.js";
 import Order from "../models/Order.js";	
 import Picture from "../models/Picture.js";
 import path from 'path'
+import cloudinary from "../components/uploadImage.cjs";
+
+
 
 /** Post product */
 export const  postProduct= async (req,res)=>{
     try {
-        let _idUser =  req.params.id;
-        const imageUrls = req.files.map(file => file.filename); 
+        let _idUser = req.params.id;
+        const imageUrls = [];
+        const files = req.files;
+        for (let i = 0; i < files.length; i++) {
+            const result = await cloudinary.uploader.upload(files[i].path);
+            imageUrls.push(result.secure_url);
+        }
+       
         const newProduct = new Product({
-            _idUser,
-            TenSp:req.body.TenSp,
-            LoaiSp:req.body.LoaiSp,
-            HangSanXuat: req.body.HangSanXuat,
-            SoLuong:req.body.SoLuong,
-            MoTaChiTiet:req.body.MoTaChiTiet,
-            Gia: req.body.Gia,
-            DiaChi: req.body.DiaChi,
-        })
-        const savedProduct = await newProduct.save()
-        const newPicture = new Picture({
-            _ids: savedProduct._id,
-            path: imageUrls
-        })
-        const savePicture = await newPicture.save()
-        res.status(200).json({savedProduct,savePicture});
-
-
-    }catch(e){
-        res.status(500).json({error: e.message});
+                  _idUser,
+                  TenSp: req.body.TenSp,
+                  LoaiSp: req.body.LoaiSp,
+                  HangSanXuat: req.body.HangSanXuat,
+                  SoLuong: req.body.SoLuong,
+                  MoTaChiTiet: req.body.MoTaChiTiet,
+                  Gia: req.body.Gia,
+                  Hinhanh: imageUrls,
+                  DiaChi: req.body.DiaChi,
+                });
+          
+                newProduct.save()
+        res.json(newProduct)
+      
+       
+    }catch (e) {
+        res.status(500).json({ error: e.message });
     }
+      
 }
 /** Get products */
 export const  getProduct= async (req,res)=>{
     try {
         const _idUser = req.params.id;
         const products = await Product.find({ _idUser });
-        const productPromises = products.map(async (product) => {
-            const images = await Image.find({ _idProduct: product._id });
-            const productWithImages = {
-                ...product._doc,
-                images: images.map((image) => image.url),
-              };
-            return productWithImages;
-        })
-        const productsWithImages = await Promise.all(productPromises);
-        res.status(200).json(productsWithImages)
+        
+        res.status(200).json(products)
 
     }catch(e){
         res.status(500).json({error: e.message});
@@ -119,8 +118,10 @@ export const updateUser= async (req,res)=>{
     try {
       
         let _id =  req.params.id;
+        const imageUrl = await cloudinary.uploader.upload(req.file.path);
+        User.updateMany({}, { $unset: { email: 1 } })
         User.findOneAndUpdate({_id:_id},{hoten: req.body.hoten,
-            hinhanh: req.body.hinhanh,
+            hinhanh: imageUrl,
             SDT: req.body.SDT,
             diachi: req.body.diachi,
             gioitinh: req.body.gioitinh},
