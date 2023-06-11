@@ -154,20 +154,5 @@ export const getOrder = async (req, res) => {
     }
 }
 
-// Get Picture
-export const getPicture = async (req, res) => {
-    // const imageName = req.params.imageName;
-    // const imagePath = path.join(process.cwd(), 'public/assets', imageName);
-    // res.sendFile(imageName);
-    try {
-        const imageName = req.params.pictureName;
-        const imagePath = path.join(process.cwd(), 'public/assets', imageName);
-        res.sendFile(imagePath);
- 
-
-   } catch (e) {
-    res.status(404).json(e.message);
-   }
-}
 
 

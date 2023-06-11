@@ -11,13 +11,33 @@ import multer from 'multer';
 
 export const searchProduct = async (req,res) =>{
     try{
-        const sreachQuery = req.query.q
-        const ragex = new RegExp(`${sreachQuery}`,"i");
+      const { name, type } = req.query;
+      if (name && !type) {
+        const ragex = new RegExp(`${name}`,"i");
         Product.find({TenSp: ragex})
             .then((products)=>{
                 res.status(200).json(products)
             })
-           
+      }  else if (!name && type){
+        const ragex = new RegExp(`${type}`,"i");
+        Product.find({LoaiSp: ragex})
+            .then((products)=>{
+                res.status(200).json(products)
+            })
+      }else if (name && type){
+        const nameSp = new RegExp(`${name}`,"i");
+        const loaiSp = new RegExp(`${type}`,"i");
+        Product.find({TenSp: nameSp},{LoaiSp: loaiSp})
+            .then((products)=>{
+                res.status(200).json(products)
+            })
+      } else{
+        Product.find({})
+          .then((products)=>{
+            res.status(200).json(products)
+          })
+
+      }
 
                 
     }catch(e){
