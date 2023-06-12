@@ -18,7 +18,9 @@ export const  postProduct= async (req,res)=>{
         const imageUrls = [];
         const files = req.files;
         for (let i = 0; i < files.length; i++) {
-            const result = await cloudinary.uploader.upload(files[i].path);
+            const result = await cloudinary.uploader.upload(files[i].path,{
+                folder:'Oldie'
+            });
             imageUrls.push(result.secure_url);
         }
        
@@ -118,7 +120,9 @@ export const updateUser= async (req,res)=>{
     try {
       
         let _id =  req.params.id;
-        const imageUrl = await cloudinary.uploader.upload(req.file.path);
+        const imageUrl = await cloudinary.uploader.upload(req.file.path,{
+            folder:'Oldie'
+        });
         User.updateMany({}, { $unset: { email: 1 } })
         User.findOneAndUpdate({_id:_id},{hoten: req.body.hoten,
             hinhanh: imageUrl,
