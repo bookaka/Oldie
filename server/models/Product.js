@@ -15,6 +15,7 @@ const ProductSchema = new mongoose.Schema({
     },
     Mota: String,
     Hinhanh: Array,
+    TinhTrang: String,
     Gia: Number,
     DiaChi: String
 },{timestamps: true}
