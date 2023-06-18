@@ -28,7 +28,6 @@ export const register = async(req,res) =>{
             diachi: null,
             gioitinh: null,
             email,
-            role
         });
         const saveUser = await newUser.save();
 

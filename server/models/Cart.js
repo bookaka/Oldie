@@ -1,13 +1,19 @@
 import mongoose  from "mongoose";
 
+const CartItem = new mongoose.Schema({
+    _idSp: {
+        type: String,
+    },
+    amount: Number
+})
+
 const CartSchema = new mongoose.Schema({
     _idUser: {
-        type: String,
-        required: true,
+        type: [CartItem],
     },
-    _idSp: {
-        type: Array,
-    },
+    cartItem:{
+        type: Array
+    }
     
 },{timestamps: true}
 )

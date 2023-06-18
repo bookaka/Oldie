@@ -5,7 +5,6 @@ import Product from "../models/Product.js";
 import Comment from "../models/Comment.js";
 import Cart from "../models/Cart.js";	
 import Order from "../models/Order.js";	
-import Picture from "../models/Picture.js";
 import path from 'path'
 import cloudinary from "../components/uploadImage.cjs";
 
@@ -32,7 +31,7 @@ export const  postProduct= async (req,res)=>{
                   SoLuong: req.body.SoLuong,
                   MoTaChiTiet: req.body.MoTaChiTiet,
                   Gia: req.body.Gia,
-                  Hinhanh: imageUrls,
+                  HinhAnh: imageUrls,
                   DiaChi: req.body.DiaChi,
                 });
           

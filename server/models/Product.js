@@ -14,7 +14,7 @@ const ProductSchema = new mongoose.Schema({
         defaul: 0,
     },
     Mota: String,
-    Hinhanh: Array,
+    HinhAnh: Array,
     TinhTrang: String,
     Gia: Number,
     DiaChi: String
